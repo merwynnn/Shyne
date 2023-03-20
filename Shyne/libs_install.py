@@ -2,7 +2,7 @@ import subprocess
 
 import sys
 
-libs = ["pygame", "pyperclip", "numpy", "Pillow"]
+libs = ["pyNDL", "pygame", "pyperclip", "numpy", "Pillow"]
 
 
 def install(package):
