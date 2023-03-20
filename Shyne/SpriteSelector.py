@@ -1,8 +1,8 @@
 import pygame
 
-from NodalLanguage.Components import Button
+from pyNDL.Components import Button
 from Shyne.Assets import images
-from NodalLanguage.TextBox import TextBox
+from pyNDL.TextBox import TextBox
 from Shyne.Sprite import Sprite
 
 title_font = pygame.font.SysFont('arial', 25)

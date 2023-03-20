@@ -1,7 +1,7 @@
 import pygame
 
-from NodalLanguage.Node import NodePrefab, Event, ImpureNode, PureNode
-from NodalLanguage.Pin import Input, Output
+from pyNDL.Node import NodePrefab, Event, ImpureNode, PureNode
+from pyNDL.Pin import Input, Output
 
 
 class PlaySound(ImpureNode, NodePrefab):
@@ -21,7 +21,7 @@ class PlaySound(ImpureNode, NodePrefab):
     def func(self):
         name = self.inputs["Name"].value
         if not self.sound or name != self.current_sound_name:
-            self.sound = pygame.mixer.Sound(self.nodalLanguage.parent.shyne.assets_path + name)
+            self.sound = pygame.mixer.Sound(self.pyNDL.parent.shyne.assets_path + name)
             self.current_sound_name = name
             self.outputs["Sound"].stored_value = self.sound
         pygame.mixer.Sound.play(self.sound)
@@ -61,7 +61,7 @@ class PlayMusic(ImpureNode, NodePrefab):
         self.inputs["Repeat"] = Input("Repeat", self, ptype=int, default_value=-1)
 
     def func(self):
-        pygame.mixer.music.load(self.nodalLanguage.parent.shyne.assets_path + self.inputs["Name"].value)
+        pygame.mixer.music.load(self.pyNDL.parent.shyne.assets_path + self.inputs["Name"].value)
         pygame.mixer.music.play(self.inputs["Repeat"].value)
 
 

@@ -1,7 +1,7 @@
 from Shyne.SpritePicker import SpritePicker, FuncPicker
 
-from NodalLanguage.Node import NodePrefab, Event, ImpureNode, PureNode, Node
-from NodalLanguage.Pin import Input, Output
+from pyNDL.Node import NodePrefab, Event, ImpureNode, PureNode, Node
+from pyNDL.Pin import Input, Output
 
 
 class CallFunctionFromSprite(ImpureNode, NodePrefab):
@@ -40,8 +40,8 @@ class CallFunctionFromSprite(ImpureNode, NodePrefab):
 
     def on_load(self):
         if self.function:
-            self.function = self.nodalLanguage.parent.shyne.get_sprite_with_id(
-                self.sprite.id).nodalLanguage.get_function_from_name(self.function.name)
+            self.function = self.pyNDL.parent.shyne.get_sprite_with_id(
+                self.sprite.id).pyNDL.get_function_from_name(self.function.name)
             self.function.callers.append(self)
 
 

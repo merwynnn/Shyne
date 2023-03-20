@@ -6,10 +6,10 @@ import numpy
 import pygame
 import inspect
 
-from NodalLanguage import NodalLanguage
+from pyNDL import pyNDL
 import random
 
-from NodalLanguage.Node import Line, ImpureNode, Event
+from pyNDL.Node import Line, ImpureNode, Event
 
 
 class Sprite:
@@ -17,7 +17,7 @@ class Sprite:
         self.name = name
         self.id = random.randint(0, 1000000)
         self.shyne = shyne
-        self.nodalLanguage = None
+        self.pyNDL = None
         self.on_load(shyne)
 
         self.display = None
@@ -44,7 +44,7 @@ class Sprite:
 
     def on_load(self, shyne):
         self.shyne = shyne
-        self.nodalLanguage = NodalLanguage(self.shyne.project_path + self.name, self.shyne.window, (0, 0),
+        self.pyNDL = pyNDL(self.shyne.project_path + self.name, self.shyne.window, (0, 0),
                                            self.shyne.scripts_size, show_top_bar=False, allow_save=False, parent=self,
                                            additional_colors=self.shyne.colors, on_action=self.on_action)
         self.display = pygame.Surface(self.shyne.window.get_size()).convert_alpha()
@@ -65,7 +65,7 @@ class Sprite:
         # Don't pickle display
         try:
             del state["shyne"]
-            del state["nodalLanguage"]
+            del state["pyNDL"]
             del state["display"]
             del state["mask"]
         except KeyError:
@@ -145,7 +145,7 @@ class Sprite:
                                      )), v_file, 1, br=1)
 
         """ Custom functions """
-        for func in self.nodalLanguage.data.functions:
+        for func in self.pyNDL.data.functions:
             name = func.name.replace(" ", "_")
             cur_outputs = {}
             for default_name in func.inputs.keys():
@@ -190,7 +190,7 @@ class Sprite:
             self.v_file_to_file(v_file, file)
 
     def build_nodes(self, node, v_file, indent, imports, variables, cur_outputs=None):
-        func = self.nodalLanguage.get_builded_node(node, imports, variables, cur_outputs=cur_outputs, compute_replacements=self.compute_replacements)[0]
+        func = self.pyNDL.get_builded_node(node, imports, variables, cur_outputs=cur_outputs, compute_replacements=self.compute_replacements)[0]
 
         if len(func) == 1 and func[0].line == "pass":
             self.write_v_file("pass", v_file, indent)
@@ -209,19 +209,19 @@ class Sprite:
             self.write_v_file(self.func_to_string(func), v_file, indent)
 
     def compute_replacements(self, node, variables):
-        replacements = {"self.nodalLanguage.parent.shyne.game.delta_time": "delta_time",
-                        "self.nodalLanguage.parent.shyne.game.first_frame": "self._first_frame",
-                        "self.nodalLanguage.parent.shyne.game.mouse_pos": "self._mouse_pos",
-                        "self.nodalLanguage.parent.shyne.game.screen_center": "self.screen_center",
-                        "self.nodalLanguage.parent.add_tag": "self.add_tag",
-                        "self.nodalLanguage.parent.shyne.assets_path": '"./Assets/"',
-                        "self.nodalLanguage.parent.shyne.game.tags": "self.tags",
+        replacements = {"self.pyNDL.parent.shyne.game.delta_time": "delta_time",
+                        "self.pyNDL.parent.shyne.game.first_frame": "self._first_frame",
+                        "self.pyNDL.parent.shyne.game.mouse_pos": "self._mouse_pos",
+                        "self.pyNDL.parent.shyne.game.screen_center": "self.screen_center",
+                        "self.pyNDL.parent.add_tag": "self.add_tag",
+                        "self.pyNDL.parent.shyne.assets_path": '"./Assets/"',
+                        "self.pyNDL.parent.shyne.game.tags": "self.tags",
                         "for k, o, in self.function.inputs_node.outputs.items():": 0,
                         "o.stored_value = self.inputs[k].value": 0,
                         "self.return_value = ": "return ",
                         "position.value": "position",
                         "rotation.value": "rotation",
-                        "self.nodalLanguage.parent": "self"}
+                        "self.pyNDL.parent": "self"}
         try:
             last_name = node.variable.name
             name = last_name.replace(' ', '_')
@@ -249,14 +249,14 @@ class Sprite:
         try:
             last_name = node.function.name
             name = last_name.replace(' ', '_')
-            if node.function.inputs_node.nodalLanguage.parent != self:
+            if node.function.inputs_node.pyNDL.parent != self:
                 inp = node.inputs.copy()
                 del inp["Sprite"]
                 del inp["Function"]
                 args = ','.join(
                     [f'self.inputs["{i_n}"].value' for i_n, i in inp.items() if not i.is_execution_pin])
                 replacements[
-                    "self.function.execute()"] = f"self.s_{node.function.inputs_node.nodalLanguage.parent.name}.{name}({args})"
+                    "self.function.execute()"] = f"self.s_{node.function.inputs_node.pyNDL.parent.name}.{name}({args})"
             else:
                 args = ','.join(
                     [f'self.inputs["{i_n}"].value' for i_n, i in node.inputs.items() if not i.is_execution_pin])

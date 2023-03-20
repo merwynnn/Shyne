@@ -1,8 +1,8 @@
 import pygame
 
-from NodalLanguage.Components import KeyPicker
-from NodalLanguage.Node import NodePrefab, Event, ImpureNode, PureNode, Node
-from NodalLanguage.Pin import Input, Output
+from pyNDL.Components import KeyPicker
+from pyNDL.Node import NodePrefab, Event, ImpureNode, PureNode, Node
+from pyNDL.Pin import Input, Output
 
 
 class OnKeyPressEvent(Event, NodePrefab):
@@ -33,4 +33,4 @@ class GetMousePosition(PureNode, NodePrefab):
         self.name = "Get Mouse Position"
 
     def func(self):
-        self.outputs["Position"].stored_value = self.nodalLanguage.parent.shyne.game.mouse_pos - self.nodalLanguage.parent.shyne.game.screen_center
+        self.outputs["Position"].stored_value = self.pyNDL.parent.shyne.game.mouse_pos - self.pyNDL.parent.shyne.game.screen_center

@@ -1,6 +1,6 @@
 
-from NodalLanguage.Node import NodePrefab, Event, ImpureNode, PureNode
-from NodalLanguage.Pin import Input, Output
+from pyNDL.Node import NodePrefab, Event, ImpureNode, PureNode
+from pyNDL.Pin import Input, Output
 import math
 
 class SetPosition(ImpureNode, NodePrefab):
@@ -12,7 +12,7 @@ class SetPosition(ImpureNode, NodePrefab):
         self.name = "Set Position"
 
     def func(self):
-        self.nodalLanguage.parent.position.value = self.nodalLanguage.parent.shyne.game.screen_center + self.inputs["Position"].value
+        self.pyNDL.parent.position.value = self.pyNDL.parent.shyne.game.screen_center + self.inputs["Position"].value
 
     def on_variable_change(self, var):
         pass
@@ -30,7 +30,7 @@ class GetPosition(PureNode, NodePrefab):
         self.is_visible_on_search = False
 
     def func(self):
-        self.outputs["Value"].stored_value = self.nodalLanguage.parent.position.value - self.nodalLanguage.parent.shyne.game.screen_center
+        self.outputs["Value"].stored_value = self.pyNDL.parent.position.value - self.pyNDL.parent.shyne.game.screen_center
 
 
 class ChangePosition(ImpureNode, NodePrefab):
@@ -42,7 +42,7 @@ class ChangePosition(ImpureNode, NodePrefab):
         self.name = "Change Position"
 
     def func(self):
-        self.nodalLanguage.parent.position.value += self.inputs["Position"].value
+        self.pyNDL.parent.position.value += self.inputs["Position"].value
 
 
 class Turn(ImpureNode, NodePrefab):
@@ -54,7 +54,7 @@ class Turn(ImpureNode, NodePrefab):
         self.name = "Turn"
 
     def func(self):
-        self.nodalLanguage.parent.rotation.value += self.inputs["Degree"].value
+        self.pyNDL.parent.rotation.value += self.inputs["Degree"].value
 
 class PointTowards(ImpureNode, NodePrefab):
     def __init__(self):
@@ -67,6 +67,6 @@ class PointTowards(ImpureNode, NodePrefab):
         self.add_import("math")
 
     def func(self):
-        a = self.nodalLanguage.parent.position.value
+        a = self.pyNDL.parent.position.value
         b = self.inputs["Position"].value
-        self.nodalLanguage.parent.rotation.value = 360-math.degrees(math.atan2(b[1]-a[1], b[0]-a[0]))
+        self.pyNDL.parent.rotation.value = 360-math.degrees(math.atan2(b[1]-a[1], b[0]-a[0]))

@@ -1,4 +1,4 @@
-from NodalLanguage.Node import NodePrefab, Event
+from pyNDL.Node import NodePrefab, Event
 from Shyne.Prefabs.Looks import *
 from Shyne.Prefabs.Motion import *
 from Shyne.Prefabs.Inputs import *
@@ -13,7 +13,7 @@ class OnFrameEvent(Event, NodePrefab):
         self.outputs["Delta Time"] = Output("Delta Time", self, ptype=float)
 
     def func(self):
-        self.outputs["Delta Time"].stored_value = self.nodalLanguage.parent.shyne.game.delta_time
+        self.outputs["Delta Time"].stored_value = self.pyNDL.parent.shyne.game.delta_time
 
 class SpawnNewSprite(ImpureNode, NodePrefab):
     def __init__(self):

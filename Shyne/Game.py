@@ -3,8 +3,8 @@ import copy
 import numpy as np
 import pygame
 
-from NodalLanguage import ThreadedProcess
-from NodalLanguage.NodePrefabs import EventStart
+from pyNDL import ThreadedProcess
+from pyNDL.NodePrefabs import EventStart
 
 small_font = pygame.font.SysFont('arial', 25)
 
@@ -24,7 +24,7 @@ class Game:
         from Shyne.Prefabs import OnKeyPressEvent
 
         for sprite in self.shyne_data.sprites:
-            for node in sprite.nodalLanguage.get_main_data().nodes:
+            for node in sprite.pyNDL.get_main_data().nodes:
                 if type(node) is OnFrameEvent:
                     self.frame_events.append(node)
                     sprite.on_frame = node
@@ -84,7 +84,7 @@ class Game:
         pygame.mixer.pause()
         self.tags = {}
         for sprite in self.shyne_data.sprites:
-            for variable in sprite.nodalLanguage.data.variables:
+            for variable in sprite.pyNDL.data.variables:
                 if variable.name == "Position":
                     variable.value = self.screen_center
                     sprite.position = variable
@@ -93,17 +93,17 @@ class Game:
                     sprite.rotation = variable
                 else:
                     variable.value = 0
-            for function in sprite.nodalLanguage.data.functions:
+            for function in sprite.pyNDL.data.functions:
                 if function.name == "Draw":
                     sprite.draw_func = function
 
             event_start_nodes = []
-            nodes = sprite.nodalLanguage.get_main_data().nodes
+            nodes = sprite.pyNDL.get_main_data().nodes
 
             for i, node in enumerate(nodes):
                 if type(node) is EventStart:
                     event_start_nodes.append(node)
-                    node.nodalLanguage.parent.on_start = node
+                    node.pyNDL.parent.on_start = node
                     t = ThreadedProcess.ThreadedProcess(f"Thread {i}", node.execute)
                     t.start()
                     self.threads.append(t)

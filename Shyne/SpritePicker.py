@@ -1,4 +1,4 @@
-from NodalLanguage.Components import Selector, Viewer
+from pyNDL.Components import Selector, Viewer
 
 
 class SpritePicker(Selector):
@@ -26,8 +26,8 @@ class SpritePicker(Selector):
 
 
 class SpritePViewer(Viewer):
-    def __init__(self, nodalLanguage, display, item, pos, delta_pos, size):
-        super().__init__(nodalLanguage, display, pos, delta_pos, size)
+    def __init__(self, pyNDL, display, item, pos, delta_pos, size):
+        super().__init__(pyNDL, display, pos, delta_pos, size)
         self.sprite = item
         self.text = self.sprite.name
         self.show_delete_btn = False
@@ -51,7 +51,7 @@ class FuncPicker(Selector):
         self.text_box.set_text("")
         self.current_text_box = text_box
         self.skip_next = True
-        self.items = self.current_text_box.parent.node.sprite.nodalLanguage.get_main_data().functions
+        self.items = self.current_text_box.parent.node.sprite.pyNDL.get_main_data().functions
         self.search()
 
     def on_unfocus(self):
@@ -59,8 +59,8 @@ class FuncPicker(Selector):
 
 
 class FuncPViewer(Viewer):
-    def __init__(self, nodalLanguage, display, item, pos, delta_pos, size):
-        super().__init__(nodalLanguage, display, pos, delta_pos, size)
+    def __init__(self, pyNDL, display, item, pos, delta_pos, size):
+        super().__init__(pyNDL, display, pos, delta_pos, size)
         self.func = item
         self.text = self.func.name
         self.show_delete_btn = False

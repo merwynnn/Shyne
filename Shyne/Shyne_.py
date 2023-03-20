@@ -11,7 +11,7 @@ from Shyne.DataHandler import load_data, save_data
 from Shyne.Previewer import Previewer
 from Shyne.SpriteSelector import SpriteSelector, SpriteNameSetter
 from Shyne.Prefabs import *
-from NodalLanguage.VariableAndFunction import Variable, Function
+from pyNDL.VariableAndFunction import Variable, Function
 from Shyne.Game import Game
 
 
@@ -77,7 +77,7 @@ class Shyne:
             pos = pygame.mouse.get_pos()
             if not self.is_fullscreen:
                 if self.current_sprite:
-                    self.current_sprite.nodalLanguage.frame(events, pos)
+                    self.current_sprite.pyNDL.frame(events, pos)
 
                 self.previewer.frame(events, pos)
                 self.sprite_selector.frame(events, pos)
@@ -129,12 +129,12 @@ class Shyne:
             sprite.on_load(self)
 
             var = Variable("Position", vtype="vec2", custom_set=SetPosition, custom_get=GetPosition)
-            sprite.nodalLanguage.add_variable(var)
+            sprite.pyNDL.add_variable(var)
             var = Variable("Rotation", vtype=float)
-            sprite.nodalLanguage.add_variable(var)
+            sprite.pyNDL.add_variable(var)
             func = Function("Draw")
-            sprite.nodalLanguage.add_function(func)
-            sprite.nodalLanguage.leftBar.update()
+            sprite.pyNDL.add_function(func)
+            sprite.pyNDL.leftBar.update()
 
             self.current_sprite = sprite
             self.sprite_selector.sprites = self.data.sprites
@@ -149,7 +149,7 @@ class Shyne:
     def save(self):
         save_data(self.name, self.data)
         for sprite in self.data.sprites:
-            sprite.nodalLanguage.save()
+            sprite.pyNDL.save()
 
     def load_data_from_file(self, filename):
         data = load_data(filename)
@@ -163,12 +163,12 @@ class Shyne:
         self.sprite_selector.update()
 
         for sprite in self.data.sprites:
-            for node in sprite.nodalLanguage.get_main_data().get_all_nodes():
+            for node in sprite.pyNDL.get_main_data().get_all_nodes():
                 node.on_load()
 
     def set_focus_blocked(self, focus):
         if self.current_sprite:
-            self.current_sprite.nodalLanguage.set_focus_blocked(focus)
+            self.current_sprite.pyNDL.set_focus_blocked(focus)
 
     def start_game(self):
         """ Start the current script """
